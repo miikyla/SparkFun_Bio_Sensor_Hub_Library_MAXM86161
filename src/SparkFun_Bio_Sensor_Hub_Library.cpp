@@ -1386,6 +1386,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::enableWrite(uint8_t _familyByte, uint8_t _index
                                                                 uint8_t _enableByte)
 {
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1404,6 +1406,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::enableWrite(uint8_t _familyByte, uint8_t _index
   // Status Byte, success or no? 0x00 is a successful transmit
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1417,6 +1422,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
                                                                 uint8_t _writeByte)
 {
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1427,6 +1434,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
   // Status Byte, success or no? 0x00 is a successful transmit
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1441,6 +1451,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
                                            uint8_t _writeByte, uint16_t _val)
 {
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1453,6 +1465,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
   // Status Byte, success or no? 0x00 is a successful transmit
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1465,6 +1480,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
                                            uint8_t _writeByte, uint8_t _writeVal)
 {
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1476,6 +1493,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
   // Status Byte, 0x00 is a successful transmit.
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1487,6 +1507,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
 uint8_t SparkFun_Bio_Sensor_Hub::writeLongBytes(uint8_t _familyByte, uint8_t _indexByte,\
                                                 uint8_t _writeByte, int32_t _writeVal[], const size_t _size)
 {
+
+  digitalWrite(_mfioPin, LOW);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1506,6 +1528,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeLongBytes(uint8_t _familyByte, uint8_t _in
   // Status Byte, 0x00 is a successful transmit.
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1517,6 +1542,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeLongBytes(uint8_t _familyByte, uint8_t _in
 uint8_t SparkFun_Bio_Sensor_Hub::writeBytes(uint8_t _familyByte, uint8_t _indexByte,\
                                                 uint8_t _writeByte, uint8_t _writeVal[], size_t _size)
 {
+
+  digitalWrite(_mfioPin, LOW);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1533,6 +1560,9 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeBytes(uint8_t _familyByte, uint8_t _indexB
   // Status Byte, 0x00 is a successful transmit.
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
   uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1546,6 +1576,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexByt
   uint8_t returnByte;
   uint8_t statusByte;
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1554,10 +1586,16 @@ uint8_t SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexByt
 
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(sizeof(returnByte) + sizeof(statusByte)));
   statusByte = _i2cPort->read();
-  if( statusByte )// SFE_BIO_SUCCESS (0x00) - how do I know its
+  if( statusByte ) {// SFE_BIO_SUCCESS (0x00) - how do I know its
+    digitalWrite(_mfioPin, HIGH);
+
     return statusByte; // Return the error, see: READ_STATUS_BYTE_VALUE
+  }
 
   returnByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return returnByte; // If good then return the actual byte.
 
 
@@ -1576,6 +1614,8 @@ uint8_t  SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexBy
   uint8_t returnByte;
   uint8_t statusByte;
 
+  digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1585,10 +1625,16 @@ uint8_t  SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexBy
 
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(sizeof(returnByte) + sizeof(statusByte)));
   statusByte = _i2cPort->read();
-  if( statusByte )// SFE_BIO_SUCCESS (0x00)
+  if( statusByte ) {// SFE_BIO_SUCCESS (0x00)
+    digitalWrite(_mfioPin, HIGH);
+
     return statusByte; // Return the error, see: READ_STATUS_BYTE_VALUE
+  }
 
   returnByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
   return returnByte; // If good then return the actual byte.
 
 }
@@ -1598,6 +1644,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readFillArray(uint8_t _familyByte, uint8_t _ind
 {
 
   uint8_t statusByte;
+
+  digitalWrite(_mfioPin, LOW);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1611,12 +1659,16 @@ uint8_t SparkFun_Bio_Sensor_Hub::readFillArray(uint8_t _familyByte, uint8_t _ind
     for(size_t i = 0; i < _numOfReads; i++){
       array[i] = 0;
     }
+    digitalWrite(_mfioPin, HIGH);
+
     return statusByte;
   }
 
   for(size_t i = 0; i < _numOfReads; i++){
     array[i] = _i2cPort->read();
   }
+  digitalWrite(_mfioPin, HIGH);
+
   return statusByte;
 
 }
@@ -1633,6 +1685,8 @@ uint16_t SparkFun_Bio_Sensor_Hub::readIntByte(uint8_t _familyByte, uint8_t _inde
    uint16_t returnByte;
    uint8_t statusByte;
 
+   digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1642,11 +1696,16 @@ uint16_t SparkFun_Bio_Sensor_Hub::readIntByte(uint8_t _familyByte, uint8_t _inde
 
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(sizeof(returnByte) + sizeof(statusByte)));
   statusByte = _i2cPort->read();
-  if( statusByte ) // Pass through if SFE_BIO_SUCCESS (0x00).
+  if( statusByte ) {// Pass through if SFE_BIO_SUCCESS (0x00).
+    digitalWrite(_mfioPin, HIGH);
+
     return statusByte; // Return the error, see: READ_STATUS_BYTE_VALUE
+  }
 
   returnByte = (_i2cPort->read() << 8);
   returnByte |= _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
 
   return returnByte;
 
@@ -1665,6 +1724,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
 
    uint8_t statusByte;
 
+   digitalWrite(_mfioPin, LOW);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1674,8 +1735,11 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
 
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(sizeof(int32_t) * _numOfReads + sizeof(statusByte)));
   statusByte = _i2cPort->read();
-  if( statusByte ) // Pass through if SFE_BIO_SUCCESS (0x00).
+  if( statusByte ) {// Pass through if SFE_BIO_SUCCESS (0x00).
+    digitalWrite(_mfioPin, HIGH);
     return statusByte;
+  }
+
   else {
     for(size_t i = 0; i < (sizeof(int32_t) * _numOfReads); i++){
       userArray[i]  = _i2cPort->read() << 24;
@@ -1683,6 +1747,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
       userArray[i] |= _i2cPort->read() << 8;
       userArray[i] |= _i2cPort->read();
     }
+    digitalWrite(_mfioPin, HIGH);
+
     return statusByte;
   }
 }
@@ -1700,6 +1766,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
 
    uint8_t statusByte;
 
+   digitalWrite(_mfioPin, HIGH);
+
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
   _i2cPort->write(_indexByte);
@@ -1709,8 +1777,11 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
 
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(_numOfReads + sizeof(statusByte)));
   statusByte = _i2cPort->read();
-  if( statusByte ) // Pass through if SFE_BIO_SUCCESS (0x00).
+  if( statusByte ){  // Pass through if SFE_BIO_SUCCESS (0x00).
+    digitalWrite(_mfioPin, HIGH);
+    
     return statusByte;
+  }
   else {
     for(size_t i = 0; i < _numOfReads; i++){
       userArray[i] = _i2cPort->read();
