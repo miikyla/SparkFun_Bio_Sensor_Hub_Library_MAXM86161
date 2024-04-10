@@ -146,17 +146,28 @@ uint8_t SparkFun_Bio_Sensor_Hub::configBpm(uint8_t mode){
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-  statusChauf = agcAlgoControl(SH_ENABLE); // One sample before interrupt is fired.
-  if( statusChauf != SFE_BIO_SUCCESS )
-    return statusChauf;
+  #if defined(SH_MAXM86161)
+    statusChauf = maxm86161Control(SH_ENABLE); //Enable Sensor.
+    if( statusChauf != SFE_BIO_SUCCESS )
+        return statusChauf;
 
-  statusChauf = max30101Control(SH_ENABLE);
-  if( statusChauf != SFE_BIO_SUCCESS )
+    statusChauf = wearableAlgoSuiteControl(mode); //Enable algorithm
+    if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
+  
+  #else 
+    statusChauf = agcAlgoControl(SH_ENABLE); // One sample before interrupt is fired.
+    if( statusChauf != SFE_BIO_SUCCESS )
+        return statusChauf;
 
-  statusChauf = maximFastAlgoControl(mode);
-  if( statusChauf != SFE_BIO_SUCCESS )
-    return statusChauf;
+    statusChauf = max30101Control(SH_ENABLE);
+    if( statusChauf != SFE_BIO_SUCCESS )
+        return statusChauf;
+
+    statusChauf = maximFastAlgoControl(mode);
+    if( statusChauf != SFE_BIO_SUCCESS )
+        return statusChauf;
+  #endif
 
   _userSelectedMode = mode;
   _sampleRate = readAlgoSamples();
