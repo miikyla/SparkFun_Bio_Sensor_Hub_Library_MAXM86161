@@ -4,6 +4,7 @@
 #include <Wire.h>
 #include <Arduino.h>
 
+#define SH_MAXM86161
 
 #define WRITE_FIFO_INPUT_BYTE  0x04
 #define SH_DISABLE             0x00
