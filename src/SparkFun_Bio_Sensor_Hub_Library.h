@@ -281,7 +281,9 @@ enum READ_AGC_ALGO_WRITE_BYTE {
 enum ALGORITHM_MODE_ENABLE_INDEX_BYTE {
 
   ENABLE_AGC_ALGO  = 0x00,
-  ENABLE_WHRM_ALGO = 0x02
+  ENABLE_AEC_ALGO  = 0x01,
+  ENABLE_WHRM_ALGO = 0x02,
+  ENABLE_WAS_ALGO  = 0x07
 
 };
 
@@ -649,6 +651,11 @@ class SparkFun_Bio_Sensor_Hub
     // This function enables (one) or disables (zero) the wrist heart rate monitor
     // algorithm.
     uint8_t maximFastAlgoControl(uint8_t);
+
+    // Family Byte: ENABLE_ALGORITHM (0x52), Index Byte:
+    // ENABLE_WAS_ALGO (0x07)
+    // This function enables or disables the wearable algorithm suite algorithm.
+    uint8_t wearableAlgoSuiteControl(uint8_t);
 
     // Family Byte: BOOTLOADER_FLASH (0x80), Index Byte: SET_NUM_PAGES (0x02),
     // Write Bytes: 0x00 - Number of pages at byte 0x44 from .msbl file.

@@ -1138,6 +1138,23 @@ uint8_t SparkFun_Bio_Sensor_Hub::maximFastAlgoControl(uint8_t mode) {
 
 }
 
+// Family Byte: ENABLE_ALGORITHM (0x52), Index Byte:
+// ENABLE_WAS_ALGO (0x07)
+// This function enables or disables the wearable algorithm suite algorithm.
+uint8_t SparkFun_Bio_Sensor_Hub::wearableAlgoSuiteControl(uint8_t mode) {
+
+  if( mode == 0 || mode == 1 || mode == 2) {}
+  else
+    return INCORR_PARAM;
+
+  uint8_t statusByte = enableWrite(ENABLE_ALGORITHM, ENABLE_WAS_ALGO, mode);
+  if (statusByte != SFE_BIO_SUCCESS)
+    return statusByte;
+  else
+    return SFE_BIO_SUCCESS;
+
+}
+
 // Family Byte: BOOTLOADER_FLASH (0x80), Index Byte: SET_INIT_VECTOR_BYTES (0x00)
 //void SparkFun_Bio_Sensor_Hub::setInitBytes
 

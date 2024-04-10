@@ -58,6 +58,7 @@ readAlgoSamples	KEYWORD2
 readMaximFastCoef	KEYWORD2
 agcAlgoControl	KEYWORD2
 maximFastAlgoControl	KEYWORD2
+wearableAlgoSuiteControl	KEYWORD2
 setNumPages	KEYWORD2
 eraseFlash	KEYWORD2
 readBootloaderVers	KEYWORD2
