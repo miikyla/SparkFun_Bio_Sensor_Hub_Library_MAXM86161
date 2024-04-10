@@ -72,9 +72,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::begin( TwoWire &wirePort, int resetPin, int mfi
   delay(1);
   setOperatingMode(EXIT_BOOTLOADER);
 
-  delay(1000);
-  
-  pinMode(_mfioPin, INPUT_PULLUP); // To be used as an interrupt later
+  delay(1500);
 
   uint8_t responseByte = readByte(READ_DEVICE_MODE, 0x00); // 0x00 only possible Index Byte.
   return responseByte;
