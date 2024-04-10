@@ -62,11 +62,18 @@ uint8_t SparkFun_Bio_Sensor_Hub::begin( TwoWire &wirePort, int resetPin, int mfi
   if ((_resetPin < 0) || (_mfioPin < 0)) // Bail if the pins have still not been defined
     return 0xFF; // Return ERR_UNKNOWN
 
-  digitalWrite(_mfioPin, HIGH);
   digitalWrite(_resetPin, LOW);
+  digitalWrite(_mfioPin, HIGH);
   delay(10);
   digitalWrite(_resetPin, HIGH);
+  delay(50);
+
+  digitalWrite(_mfioPin, LOW);
+  delay(1);
+  setOperatingMode(EXIT_BOOTLOADER);
+
   delay(1000);
+  
   pinMode(_mfioPin, INPUT_PULLUP); // To be used as an interrupt later
 
   uint8_t responseByte = readByte(READ_DEVICE_MODE, 0x00); // 0x00 only possible Index Byte.
