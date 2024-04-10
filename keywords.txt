@@ -25,7 +25,9 @@ readAdcRange	KEYWORD2
 getMcuType	KEYWORD2
 getBootloaderInf	KEYWORD2
 max30101Control	KEYWORD2
+maxm86161Control	KEYWORD2
 readMAX30101State	KEYWORD2
+readMAXM86161State	KEYWORD2
 accelControl	KEYWORD2
 setOutputMode	KEYWORD2
 setFifoThreshold	KEYWORD2
@@ -33,12 +35,16 @@ numSamplesOutFifo	KEYWORD2
 getDataOutFifo	KEYWORD2
 numSamplesExternalSensor	KEYWORD2
 writeRegisterMAX30101	KEYWORD2
+writeRegisterMAXM86161	KEYWORD2
 writeRegisterAccel	KEYWORD2
 readRegisterMAX30101	KEYWORD2
+readRegisterMAXM86161	KEYWORD2
 readRegisterAccel	KEYWORD2
 getAfeAttributesMAX30101	KEYWORD2
+getAfeAttributesMAXM86161	KEYWORD2
 getAfeAttributesAccelerometer	KEYWORD2
 dumpRegisterMAX30101	KEYWORD2
+dumpRegisterMAXM86161	KEYWORD2
 dumpRegisterAccelerometer	KEYWORD2
 setAlgoRange	KEYWORD2
 setAlgoStepSize	KEYWORD2

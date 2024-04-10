@@ -31,6 +31,8 @@
 #define MAXFAST_EXTENDED_DATA     5
 #define MAX30101_LED_ARRAY        12 // 4 values of 24 bit (3 byte) LED values
 
+#define ENABLE_CMD_MAXM86161_DELAY 250 // Milliseconds
+
 #define SET_FORMAT             0x00
 #define READ_FORMAT            0x01 // Index Byte under Family Byte: READ_OUTPUT_MODE (0x11)
 #define WRITE_SET_THRESHOLD    0x01 //Index Byte for WRITE_INPUT(0x14)
@@ -91,26 +93,26 @@ enum READ_STATUS_BYTE_VALUE {
 // referencing it's larger category: Family Register Byte.
 enum FAMILY_REGISTER_BYTES {
 
-  HUB_STATUS               = 0x00,
+  HUB_STATUS                = 0x00,
   SET_DEVICE_MODE,
   READ_DEVICE_MODE,
-  OUTPUT_MODE            = 0x10,
+  OUTPUT_MODE               = 0x10,
   READ_OUTPUT_MODE,
   READ_DATA_OUTPUT,
   READ_DATA_INPUT,
   WRITE_INPUT,
-  WRITE_REGISTER           = 0x40,
+  WRITE_REGISTER            = 0x40,
   READ_REGISTER,
   READ_ATTRIBUTES_AFE,
   DUMP_REGISTERS,
   ENABLE_SENSOR,
   READ_SENSOR_MODE,
-  CHANGE_ALGORITHM_CONFIG  = 0x50,
+  CHANGE_ALGORITHM_CONFIG   = 0x50,
   READ_ALGORITHM_CONFIG,
   ENABLE_ALGORITHM,
-  BOOTLOADER_FLASH         = 0x80,
+  BOOTLOADER_FLASH          = 0x80,
   BOOTLOADER_INFO,
-  IDENTITY                 = 0xFF
+  IDENTITY                  = 0xFF
 
 };
 
@@ -122,9 +124,10 @@ enum FAMILY_REGISTER_BYTES {
 // Byte: 0x00.
 enum DEVICE_MODE_WRITE_BYTES {
 
-  EXIT_BOOTLOADER          = 0x00,
-  SFE_BIO_RESET            = 0x02,
-  ENTER_BOOTLOADER         = 0x08
+  EXIT_BOOTLOADER           = 0x00,
+  SFE_BIO_SHUTDOWN          = 0x01,
+  SFE_BIO_RESET             = 0x02,
+  ENTER_BOOTLOADER          = 0x08
 
 };
 
@@ -165,6 +168,7 @@ enum FIFO_EXTERNAL_INDEX_BYTE {
 // Index Byte under the Family Registry Byte: WRITE_REGISTER (0x40)
 enum WRITE_REGISTER_INDEX_BYTE {
 
+  WRITE_MAXM86161 = 0x00,
   WRITE_MAX30101 = 0x03,
   WRITE_ACCELEROMETER
 
@@ -173,6 +177,7 @@ enum WRITE_REGISTER_INDEX_BYTE {
 // Index Byte under the Family Registry Byte: READ_REGISTER (0x41)
 enum READ_REGISTER_INDEX_BYTE {
 
+  READ_MAXM86161 = 0x00,
   READ_MAX30101 = 0x03,
   READ_ACCELEROMETER
 
@@ -180,7 +185,8 @@ enum READ_REGISTER_INDEX_BYTE {
 
 // Index Byte under the Family Registry Byte: READ_ATTRIBUTES_AFE (0x42)
 enum GET_AFE_INDEX_BYTE {
-
+  
+  RETRIEVE_AFE_MAXM86161 = 0x00,
   RETRIEVE_AFE_MAX30101 = 0x03,
   RETRIEVE_AFE_ACCELEROMETER
 
@@ -189,6 +195,7 @@ enum GET_AFE_INDEX_BYTE {
 // Index Byte under the Family Byte: DUMP_REGISTERS (0x43)
 enum DUMP_REGISTER_INDEX_BYTE {
 
+  DUMP_REGISTER_MAXM86161 = 0x00,
   DUMP_REGISTER_MAX30101 = 0x03,
   DUMP_REGISTER_ACCELEROMETER
 
@@ -197,6 +204,7 @@ enum DUMP_REGISTER_INDEX_BYTE {
 // Index Byte under the Family Byte: ENABLE_SENSOR (0x44)
 enum SENSOR_ENABLE_INDEX_BYTE {
 
+  ENABLE_MAXM86161 = 0x00,
   ENABLE_MAX30101 = 0x03,
   ENABLE_ACCELEROMETER
 
@@ -205,6 +213,7 @@ enum SENSOR_ENABLE_INDEX_BYTE {
 // Index Byte for the Family Byte: READ_SENSOR_MODE (0x45)
 enum READ_SENSOR_ENABLE_INDEX_BYTE {
 
+  READ_ENABLE_MAXM86161 = 0x00,
   READ_ENABLE_MAX30101 = 0x03,
   READ_ENABLE_ACCELEROMETER
 
@@ -449,9 +458,18 @@ class SparkFun_Bio_Sensor_Hub
     // This function enables the MAX30101.
     uint8_t max30101Control(uint8_t);
 
+    // Family Byte: ENABLE_SENSOR (0x44), Index Byte: ENABLE_MAXM86161 (0x00), Write
+    // Byte: senSwitch (parameter - 0x00 or 0x01).
+    // This function enables the MAXM86161.
+    uint8_t maxm86161Control(uint8_t);
+
     // Family Byte: READ_SENSOR_MODE (0x45), Index Byte: READ_ENABLE_MAX30101 (0x03)
     // This function checks if the MAX30101 is enabled or not.
     uint8_t readMAX30101State();
+
+    // Family Byte: READ_SENSOR_MODE (0x45), Index Byte: READ_ENABLE_MAXM86161 (0x00)
+    // This function checks if the MAXM86161 is enabled or not.
+    uint8_t readMAXM86161State();
 
     // Family Byte: ENABLE_SENSOR (0x44), Index Byte: ENABLE_ACCELEROMETER (0x04), Write
     // Byte: accelSwitch (parameter - 0x00 or 0x01).
@@ -492,6 +510,13 @@ class SparkFun_Bio_Sensor_Hub
     // non-successful write.
     void writeRegisterMAX30101(uint8_t, uint8_t);
 
+    // Family Byte: WRITE_REGISTER (0x40), Index Byte: WRITE_MAXM86161 (0x00), Write Bytes:
+    // Register Address and Register Value
+    // This function writes the given register value at the given register address
+    // for the MAXM86161 sensor and returns a boolean indicating a successful or
+    // non-successful write.
+    void writeRegisterMAXM86161(uint8_t, uint8_t);
+
     // Family Byte: WRITE_REGISTER (0x40), Index Byte: WRITE_ACCELEROMETER (0x04), Write Bytes:
     // Register Address and Register Value
     // This function writes the given register value at the given register address
@@ -505,6 +530,12 @@ class SparkFun_Bio_Sensor_Hub
     // returns the values at that register.
     uint8_t readRegisterMAX30101(uint8_t);
 
+    // Family Byte: READ_REGISTER (0x41), Index Byte: READ_MAXM86161 (0x00), Write Byte:
+    // Register Address
+    // This function reads the given register address for the MAXM86161 Sensor and
+    // returns the values at that register.
+    uint8_t readRegisterMAXM86161(uint8_t);
+
     // Family Byte: READ_REGISTER (0x41), Index Byte: READ_MAX30101 (0x03), Write Byte:
     // Register Address
     // This function reads the given register address for the MAX30101 Sensor and
@@ -516,6 +547,12 @@ class SparkFun_Bio_Sensor_Hub
     // MAX30101 sensor. It returns the number of bytes in a word for the sensor
     // and the number of registers available.
     sensorAttr getAfeAttributesMAX30101();
+
+    // Family Byte: READ_ATTRIBUTES_AFE (0x42), Index Byte: RETRIEVE_AFE_MAXM86161/ (0x00)
+    // This function retrieves the attributes of the AFE (Analog Front End) of the
+    // MAXM86161 sensor. It returns the number of bytes in a word for the sensor
+    // and the number of registers available.
+    sensorAttr getAfeAttributesMAXM86161();
 
     // Family Byte: READ_ATTRIBUTES_AFE (0x42), Index Byte:
     // RETRIEVE_AFE_ACCELEROMETER (0x04)
@@ -529,6 +566,12 @@ class SparkFun_Bio_Sensor_Hub
     // MAX30101 sensor: register zero and register value zero to register n and
     // register value n. There are 36 registers in this case.
     uint8_t dumpRegisterMAX30101(uint8_t regArray[]);
+
+    // Family Byte: DUMP_REGISTERS (0x43), Index Byte: DUMP_REGISTER_MAXM86161 (0x00)
+    // This function returns all registers and register values sequentially of the
+    // MAXM86161 sensor: register zero and register value zero to register n and
+    // register value n. There are 44 registers in this case.
+    uint8_t dumpRegisterMAXM86161(uint8_t regArray[]);
 
     // Family Byte: DUMP_REGISTERS (0x43), Index Byte: DUMP_REGISTER_ACCELEROMETER (0x04)
     // This function returns all registers and register values sequentially of the

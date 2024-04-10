@@ -676,11 +676,38 @@ uint8_t SparkFun_Bio_Sensor_Hub::max30101Control(uint8_t senSwitch) {
 
 }
 
+// Family Byte: ENABLE_SENSOR (0x44), Index Byte: ENABLE_MAXM86161 (0x00), Write
+// Byte: senSwitch  (parameter - 0x00 or 0x01).
+// This function enables the MAXM86161.
+uint8_t SparkFun_Bio_Sensor_Hub::maxm86161Control(uint8_t senSwitch) {
+
+  if(senSwitch == 0 || senSwitch == 1)
+    { }
+  else
+    return INCORR_PARAM;
+
+  // Check that communication was successful, not that the sensor is enabled.
+  uint8_t statusByte = enableWrite(ENABLE_SENSOR, ENABLE_MAXM86161, senSwitch);
+  if( statusByte != SFE_BIO_SUCCESS )
+    return statusByte;
+  else
+    return SFE_BIO_SUCCESS;
+
+}
+
 // Family Byte: READ_SENSOR_MODE (0x45), Index Byte: READ_ENABLE_MAX30101 (0x03)
 // This function checks if the MAX30101 is enabled or not.
 uint8_t SparkFun_Bio_Sensor_Hub::readMAX30101State(){
 
   uint8_t state = readByte(READ_SENSOR_MODE, READ_ENABLE_MAX30101);
+  return state;
+}
+
+// Family Byte: READ_SENSOR_MODE (0x45), Index Byte: READ_ENABLE_MAXM86161 (0x00)
+// This function checks if the MAXM86161 is enabled or not.
+uint8_t SparkFun_Bio_Sensor_Hub::readMAXM86161State(){
+
+  uint8_t state = readByte(READ_SENSOR_MODE, READ_ENABLE_MAXM86161);
   return state;
 }
 
@@ -780,6 +807,18 @@ void SparkFun_Bio_Sensor_Hub::writeRegisterMAX30101(uint8_t regAddr, uint8_t reg
 
 }
 
+// Family Byte: WRITE_REGISTER (0x40), Index Byte: WRITE_MAXM86161 (0x00), Write Bytes:
+// Register Address and Register Value
+// This function writes the given register value at the given register address
+// for the MAXM86161 sensor and returns a boolean indicating a successful or
+// non-successful write.
+void SparkFun_Bio_Sensor_Hub::writeRegisterMAXM86161(uint8_t regAddr, uint8_t regVal) {
+
+  writeByte(WRITE_REGISTER, WRITE_MAXM86161, regAddr, regVal);
+
+}
+
+
 // Family Byte: WRITE_REGISTER (0x40), Index Byte: WRITE_ACCELEROMETER (0x04), Write Bytes:
 // Register Address and Register Value
 // This function writes the given register value at the given register address
@@ -798,6 +837,17 @@ void SparkFun_Bio_Sensor_Hub::writeRegisterAccel(uint8_t regAddr, uint8_t regVal
 uint8_t SparkFun_Bio_Sensor_Hub::readRegisterMAX30101(uint8_t regAddr) {
 
   uint8_t regCont = readByte(READ_REGISTER, READ_MAX30101, regAddr);
+  return regCont;
+
+}
+
+// Family Byte: READ_REGISTER (0x41), Index Byte: READ_MAXM86161 (0x00), Write Byte:
+// Register Address
+// This function reads the given register address for the MAXM86161 Sensor and
+// returns the values at that register.
+uint8_t SparkFun_Bio_Sensor_Hub::readRegisterMAXM86161(uint8_t regAddr) {
+
+  uint8_t regCont = readByte(READ_REGISTER, READ_MAXM86161, regAddr);
   return regCont;
 
 }
@@ -829,6 +879,23 @@ sensorAttr SparkFun_Bio_Sensor_Hub::getAfeAttributesMAX30101() {
 
   return maxAttr;
 
+}
+
+// Family Byte: READ_ATTRIBUTES_AFE (0x42), Index Byte: RETRIEVE_AFE_MAXM86161 (0x00)
+// This function retrieves the attributes of the AFE (Analog Front End) of the
+// MAXM86161 sensor. It returns the number of bytes in a word for the sensor
+// and the number of registers available.
+sensorAttr SparkFun_Bio_Sensor_Hub::getAfeAttributesMAXM86161() {
+
+  sensorAttr maxAttr;
+  uint8_t tempArray[2] {};
+
+  readFillArray(READ_ATTRIBUTES_AFE, RETRIEVE_AFE_MAXM86161, 2, tempArray);
+
+  maxAttr.byteWord = tempArray[0];
+  maxAttr.availRegisters = tempArray[1];
+
+  return maxAttr;
 
 }
 
@@ -859,6 +926,18 @@ uint8_t SparkFun_Bio_Sensor_Hub::dumpRegisterMAX30101(uint8_t regArray[]) {
 
   uint8_t numOfBytes = 36;
   uint8_t status = readFillArray(DUMP_REGISTERS, DUMP_REGISTER_MAX30101, numOfBytes, regArray);
+  return status;
+
+}
+
+// Family Byte: DUMP_REGISTERS (0x43), Index Byte: DUMP_REGISTER_MAXM86161 (0x00)
+// This function returns all registers and register values sequentially of the
+// MAXM86161 sensor: register zero and register value zero to register n and
+// register value n. There are 36 registers in this case.
+uint8_t SparkFun_Bio_Sensor_Hub::dumpRegisterMAXM86161(uint8_t regArray[]) {
+
+  uint8_t numOfBytes = 44;
+  uint8_t status = readFillArray(DUMP_REGISTERS, DUMP_REGISTER_MAXM86161, numOfBytes, regArray);
   return status;
 
 }
@@ -1315,6 +1394,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::enableWrite(uint8_t _familyByte, uint8_t _index
 
   if( _familyByte == ENABLE_SENSOR && _indexByte == ENABLE_MAX30101)
     delay(ENABLE_CMD_DELAY);
+  if( _familyByte == ENABLE_SENSOR && _indexByte == ENABLE_MAXM86161)
+    delay(ENABLE_CMD_MAXM86161_DELAY);
   if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_AGC_ALGO)
     delay(ALGO_CMD_DELAY_SHORT);
   if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_WHRM_ALGO)
