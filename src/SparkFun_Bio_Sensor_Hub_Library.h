@@ -6,8 +6,8 @@
 
 
 #define WRITE_FIFO_INPUT_BYTE  0x04
-#define DISABLE                0x00
-#define ENABLE                 0x01
+#define SH_DISABLE             0x00
+#define SH_ENABLE              0x01
 #define MODE_ONE               0x01
 #define MODE_TWO               0x02
 #define APP_MODE               0x00

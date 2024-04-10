@@ -141,11 +141,11 @@ uint8_t SparkFun_Bio_Sensor_Hub::configBpm(uint8_t mode){
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-  statusChauf = agcAlgoControl(ENABLE); // One sample before interrupt is fired.
+  statusChauf = agcAlgoControl(SH_ENABLE); // One sample before interrupt is fired.
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-  statusChauf = max30101Control(ENABLE);
+  statusChauf = max30101Control(SH_ENABLE);
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
@@ -176,7 +176,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensor(){
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-  statusChauf = max30101Control(ENABLE); //Enable Sensor.
+  statusChauf = max30101Control(SH_ENABLE); //Enable Sensor.
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
@@ -208,7 +208,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpm(uint8_t mode){
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-  statusChauf = max30101Control(ENABLE); //Enable Sensor.
+  statusChauf = max30101Control(SH_ENABLE); //Enable Sensor.
   if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
