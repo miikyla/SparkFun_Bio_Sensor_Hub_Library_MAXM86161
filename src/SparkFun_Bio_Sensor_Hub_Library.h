@@ -4,8 +4,6 @@
 #include <Wire.h>
 #include <Arduino.h>
 
-#define SH_MAXM86161
-
 #define WRITE_FIFO_INPUT_BYTE  0x04
 #define SH_DISABLE             0x00
 #define SH_ENABLE              0x01
@@ -57,38 +55,36 @@ struct bioData {
 };
 
 struct sensorAlgoData {
-    uint32_t led1;
-    uint32_t led2;
-    uint32_t led3;
-    uint32_t led4;
-    uint32_t led5;
-    uint32_t led6;
+    uint32_t led1; // PPG1 (PD1) Green1 counts.
+    uint32_t led2; // PPG2 (PD1) IR LED counts.
+    uint32_t led3; // PPG3 (PD1) Red LED counts.
+    uint32_t led4; // PPG4 (PD2) Green2 counts.
+    uint32_t led5; // PPG5 (PD2) N/A.
+    uint32_t led6; // PPG6 (PD2) N/A.
 
-    int16_t x;
-    int16_t y;
-    int16_t z;
+    int16_t x; // Accelerometer X-axis data. Two's complement. lsb = 0.001g.
+    int16_t y; // Accelerometer Y-axis data. Two's complement. lsb = 0.001g.
+    int16_t z; // Accelerometer Z-axis data. Two's complement. lsb = 0.001g.
+    uint8_t current_operating_mode; // Current operating mode of the sensor.
 
-    uint8_t current_operating_mode;
+    uint16_t hr; // Calculated heart rate (10x).
+    uint8_t hrConf; // Heart rate confidence level in % (>40 for consumer devices, >80,90 for medical devices).
 
-    uint16_t hr;
-    uint8_t hrConf;
+    uint16_t rr; // Inter-beat interval in ms (10x).
+    uint8_t rrConf; // Confidence level of RtoR in % (nonzero when a new value is calculated).
 
-    uint16_t rr;
-    uint8_t rrConf;
+    uint8_t activityClass; // Activity class (0: Rest, 1: Other, 2: Walk, 3: Run, 4: Bike).
 
-    uint8_t activityClass;
-
-    uint16_t r;
-
-    uint8_t spo2Conf;
-    uint16_t spo2;
-    uint8_t spo2PercentComplete;
-    uint8_t spo2LowSignalQualityFlag;
-    uint8_t spo2MotionFlag;
-    uint8_t spo2LowPIFlag;
-    uint8_t spo2UnreliableRFlag;
-    uint8_t spo2State;
-    uint8_t skinContactState;
+    uint16_t r; // Calculated SpO2 R value (1000x).
+    uint8_t spo2Conf; // SpO2 confidence level in %, >40 is for consumer devices, >80,90 is for medical devices.
+    uint16_t spo2; // SpO2 value (10x).
+    uint8_t spo2PercentComplete; // SpO2 percent complete (0-100%). Bit[7]: SpO2 valid, Bit[6..0]: Percent complete.
+    uint8_t spo2LowSignalQualityFlag; // SpO2 signal quality flag (0: Good quality, 1: Low quality).
+    uint8_t spo2MotionFlag; // SpO2 motion flag (0: No motion, 1: Excessive motion).
+    uint8_t spo2LowPIFlag; // SpO2 low PI flag (0: Normal PI, 1: Low PI).
+    uint8_t spo2ReliabilityFlag; // SpO2 reliability flag for R (0: Reliable, 1: Unreliable).
+    uint8_t spo2State; // SpO2 state (0: LED adjustment, 1: Computation, 2: Success, 3: Timeout).
+    uint8_t skinContactState; // Skin contact state (0: Undetected, 1: Off skin, 2: On some subject, 3: On skin).
 };
 
 struct version {
