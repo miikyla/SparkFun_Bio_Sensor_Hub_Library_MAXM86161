@@ -4,7 +4,6 @@
 #include <Wire.h>
 #include <Arduino.h>
 
-
 #define WRITE_FIFO_INPUT_BYTE  0x04
 #define SH_DISABLE             0x00
 #define SH_ENABLE              0x01
@@ -53,6 +52,41 @@ struct bioData {
   uint8_t  reserveOne;  // --
   uint8_t  resserveTwo; // -- Algorithm Mode 2 ^^
 
+};
+
+struct sensorAlgoData {
+    uint32_t led1;
+    uint32_t led2;
+    uint32_t led3;
+    uint32_t led4;
+    uint32_t led5;
+    uint32_t led6;
+
+    int16_t x;
+    int16_t y;
+    int16_t z;
+
+    uint8_t current_operating_mode;
+
+    uint16_t hr;
+    uint8_t hrConf;
+
+    uint16_t rr;
+    uint8_t rrConf;
+
+    uint8_t activityClass;
+
+    uint16_t r;
+
+    uint8_t spo2Conf;
+    uint16_t spo2;
+    uint8_t spo2PercentComplete;
+    uint8_t spo2LowSignalQualityFlag;
+    uint8_t spo2MotionFlag;
+    uint8_t spo2LowPIFlag;
+    uint8_t spo2UnreliableRFlag;
+    uint8_t spo2State;
+    uint8_t skinContactState;
 };
 
 struct version {
