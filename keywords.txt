@@ -13,6 +13,7 @@ setOperatingMode	KEYWORD2
 configBpm	KEYWORD2
 configSensor	KEYWORD2
 configSensorBpm	KEYWORD2
+configSensorBpmMAXM86161 KEYWORD2
 readBpm	KEYWORD2
 readSensor	KEYWORD2
 readSensorBpm	KEYWORD2

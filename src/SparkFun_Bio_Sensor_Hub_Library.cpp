@@ -240,6 +240,64 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpm(uint8_t mode){
 
 }
 
+// This function sets very basic settings to get sensor and biometric data.
+// Sensor data includes 24 bit LED values for the three LED channels: Red, Green and IR.
+// The biometric data includes data about heartrate, the confidence
+// level, SpO2 levels, and whether the sensor has detected a finger or not.
+// Of note, the number of samples is set to one.
+uint8_t configSensorBpmMAXM86161(uint8_t mode) 
+{
+    uint8_t statusChauf; // Our status chauffeur
+    if (mode == MODE_ONE || mode == MODE_TWO){}
+    else return INCORR_PARAM;
+
+    Serial.println("1.0");
+    Serial.println("1.1");
+
+    Serial.println("1.2");
+    statusChauf = setOutputMode(SENSOR_AND_ALGORITHM); // Data and sensor data
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.3");
+    statusChauf = setFifoThreshold(0x01); // One sample before interrupt is fired to the MAX32664
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.4");
+    statusChauf = writeByte(0x10, 0x02, 0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.5");
+    statusChauf = writeByte(0x50, 0x07, 0x0A, 0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.6");
+    statusChauf = writeByte(0x50, 0x07, 0x0B, 0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.7");
+    statusChauf = writeByte(0x50, 0x07, 0x12, 0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.8");
+    statusChauf = writeByte(0x50, 0x07, 0x0C, 0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.30");
+    statusChauf = wearableAlgoSuiteControl(SH_ENABLE); //Enable algorithm.
+
+    _userSelectedMode = mode;
+    _sampleRate = readAlgoSamples();
+
+    return SFE_BIO_SUCCESS;
+}
+
 // This function takes the 8 bytes from the FIFO buffer related to the wrist
 // heart rate algortihm: heart rate (uint16_t), confidence (uint8_t) , SpO2 (uint16_t),
 // and the finger detected status (uint8_t). Note that the the algorithm is stated as

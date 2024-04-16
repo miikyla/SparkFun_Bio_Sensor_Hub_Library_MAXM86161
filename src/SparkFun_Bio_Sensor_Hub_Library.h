@@ -409,6 +409,13 @@ class SparkFun_Bio_Sensor_Hub
     // Of note, the number of samples is set to one.
     uint8_t configSensorBpm(uint8_t);
 
+    // This function sets very basic settings to get sensor and biometric data.
+    // Sensor data includes 24 bit LED values for the three LED channels: Red, Green and IR.
+    // The biometric data includes data about heartrate, the confidence
+    // level, SpO2 levels, and whether the sensor has detected a finger or not.
+    // Of note, the number of samples is set to one.
+    uint8_t configSensorBpmMAXM86161(uint8_t);
+
     // This function takes the 8 bytes from the FIFO buffer related to the wrist
     // heart rate algortihm: heart rate (uint16_t), confidence (uint8_t) , SpO2 (uint16_t),
     // and the finger detected status (uint8_t). Note that the the algorithm is stated as
