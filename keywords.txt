@@ -17,6 +17,7 @@ configSensorBpmMAXM86161 KEYWORD2
 readBpm	KEYWORD2
 readSensor	KEYWORD2
 readSensorBpm	KEYWORD2
+readSensorBpmMAXM86161	KEYWORD2
 setPulseWidth	KEYWORD2
 readPulseWidth	KEYWORD2
 setSampleRate	KEYWORD2

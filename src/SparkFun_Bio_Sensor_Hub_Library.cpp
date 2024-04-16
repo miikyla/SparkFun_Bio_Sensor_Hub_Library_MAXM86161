@@ -522,6 +522,146 @@ bioData SparkFun_Bio_Sensor_Hub::readSensorBpm(){
 
 
 }
+
+// This function takes the information of both the LED value and the biometric
+// data from the MAX32664's FIFO. In essence it combines the two functions
+// above into a single function call.
+sensorAlgoData SparkFun_Bio_Sensor_Hub::readSensorBpmMAXM86161(){
+
+  sensorAlgoData tempArr;
+
+  if (_userSelectedMode == MODE_ONE){
+
+    readFillArray(0x12, 0x01, 24 + 20, tempArr);
+
+    // Green1 counts
+    tempArr.led1 = uint32_t(tempArr[0]) << 16;
+    tempArr.led1 |= uint32_t(tempArr[1]) << 8;
+    tempArr.led1 |= uint32_t(tempArr[2]);
+
+    // IR LED counts
+    tempArr.led2 = uint32_t(tempArr[3]) << 16;
+    tempArr.led2 |= uint32_t(tempArr[4]) << 8;
+    tempArr.led2 |= uint32_t(tempArr[5]);
+
+    // Red LED counts
+    tempArr.led3 = uint32_t(tempArr[6]) << 16;
+    tempArr.led3 |= uint32_t(tempArr[7]) << 8;
+    tempArr.led3 |= uint32_t(tempArr[8]);
+
+    // Green2 counts
+    tempArr.led4 = uint32_t(tempArr[9]) << 16;
+    tempArr.led4 |= uint32_t(tempArr[10]) << 8;
+    tempArr.led4 |= uint32_t(tempArr[11]);
+
+    // Accelerometer X-axis data
+    tempArr.x = int16_t(tempArr[18]) << 8;
+    tempArr.x |= int16_t(tempArr[19]);
+
+    // Accelerometer Y-axis data
+    tempArr.y = int16_t(tempArr[20]) << 8;
+    tempArr.y |= int16_t(tempArr[21]);
+
+    // Accelerometer Z-axis data
+    tempArr.z = int16_t(tempArr[22]) << 8;
+    tempArr.z |= int16_t(tempArr[23]);
+
+    // Current operating mode of the sensor
+    tempArr.current_operating_mode = tempArr[24];
+
+    // Calculated heart rate (10x)
+    tempArr.hr = uint16_t(tempArr[25]) << 8;
+    tempArr.hr |= uint16_t(tempArr[26]);
+    tempArr.hr /= 10;
+
+    // Heart rate confidence level in % (>40 for consumer devices, >80,90 for medical devices)
+    tempArr.hrConf = tempArr[27];
+
+    // Inter-beat interval in ms (10x)
+    tempArr.rr = uint16_t(tempArr[28]) << 8;
+    tempArr.rr |= uint16_t(tempArr[29]);
+    tempArr.rr /= 10;
+
+    // Confidence level of RtoR in % (nonzero when a new value is calculated)
+    tempArr.rrConf = tempArr[30];
+
+    // Activity class (0: Rest, 1: Other, 2: Walk, 3: Run, 4: Bike)
+    tempArr.activityClass = tempArr[31];
+
+    // Calculated SpO2 R value (1000x)
+    tempArr.r = uint16_t(tempArr[32]) << 8;
+    tempArr.r |= uint16_t(tempArr[33]);
+    tempArr.r /= 1000;
+
+    // SpO2 confidence level in %, >40 is for consumer devices, >80,90 is for medical devices
+    tempArr.spo2Conf = tempArr[34];
+
+    // SpO2 value (10x)
+    tempArr.spo2 = uint16_t(tempArr[35]) << 8;
+    tempArr.spo2 |= uint16_t(tempArr[36]);
+    tempArr.spo2 /= 10;
+
+    // SpO2 percent complete (0-100%). Bit[7]: SpO2 valid, Bit[6..0]: Percent complete
+    tempArr.spo2PercentComplete = tempArr[37];
+
+    // SpO2 signal quality flag (0: Good quality, 1: Low quality)
+    tempArr.spo2LowSignalQualityFlag = tempArr[38];
+
+    // SpO2 motion flag (0: No motion, 1: Excessive motion)
+    tempArr.spo2MotionFlag = tempArr[39];
+
+    // SpO2 low PI flag (0: Normal PI, 1: Low PI)
+    tempArr.spo2LowPIFlag = tempArr[40];
+
+    // SpO2 reliability flag for R (0: Reliable, 1: Unreliable)
+    tempArr.spo2ReliabilityFlag = tempArr[41];
+
+    // SpO2 state (0: LED adjustment, 1: Computation, 2: Success, 3: Timeout)
+    tempArr.spo2State = tempArr[42];
+
+    // Skin contact state (0: Undetected, 1: Off skin, 2: On some subject, 3: On skin)
+    tempArr.skinContactState = tempArr[43];
+
+    return tempArr;
+  }
+
+  else if (_userSelectedMode == MODE_TWO){
+
+    // TODO
+    
+    return tempArr;
+
+  }
+
+  else {
+    tempArr.led1 = 0;
+    tempArr.led2 = 0;
+    tempArr.led3 = 0;
+    tempArr.led4 = 0;
+    tempArr.x = 0;
+    tempArr.y = 0;
+    tempArr.z = 0;
+    tempArr.current_operating_mode = 0;
+    tempArr.hr = 0;
+    tempArr.hrConf = 0;
+    tempArr.rr = 0;
+    tempArr.rrConf = 0;
+    tempArr.activityClass = 0;
+    tempArr.r = 0;
+    tempArr.spo2Conf = 0;
+    tempArr.spo2 = 0;
+    tempArr.spo2PercentComplete = 0;
+    tempArr.spo2LowSignalQualityFlag = 0;
+    tempArr.spo2MotionFlag = 0;
+    tempArr.spo2LowPIFlag = 0;
+    tempArr.spo2ReliabilityFlag = 0;
+    tempArr.spo2State = 0;
+    tempArr.skinContactState = 0;
+
+    return tempArr;
+  }
+}
+
 // This function modifies the pulse width of the MAX30101 LEDs. All of the LEDs
 // are modified to the same width. This will affect the number of samples that
 // can be collected and will also affect the ADC resolution.

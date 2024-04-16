@@ -436,6 +436,11 @@ class SparkFun_Bio_Sensor_Hub
     // above into a single function call.
     bioData readSensorBpm();
 
+    // This function takes the information of both the LED value and the biometric
+    // data from the MAX32664's FIFO. In essence it combines the two functions
+    // above into a single function call.
+    sensorAlgoData readSensorBpmMAXM86161();
+
     // This function modifies the pulse width of the MAX30101 LEDs. All of the LEDs
     // are modified to the same width. This will affect the number of samples that
     // can be collected and will also affect the ADC resolution.
