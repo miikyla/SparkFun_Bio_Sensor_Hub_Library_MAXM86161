@@ -67,17 +67,17 @@ struct sensorAlgoData {
     int16_t z; // Accelerometer Z-axis data. Two's complement. lsb = 0.001g.
     uint8_t current_operating_mode; // Current operating mode of the sensor.
 
-    uint16_t hr; // Calculated heart rate (10x).
+    float hr; // Calculated heart rate (10x).
     uint8_t hrConf; // Heart rate confidence level in % (>40 for consumer devices, >80,90 for medical devices).
 
-    uint16_t rr; // Inter-beat interval in ms (10x).
+    float rr; // Inter-beat interval in ms (10x).
     uint8_t rrConf; // Confidence level of RtoR in % (nonzero when a new value is calculated).
 
     uint8_t activityClass; // Activity class (0: Rest, 1: Other, 2: Walk, 3: Run, 4: Bike).
 
-    uint16_t r; // Calculated SpO2 R value (1000x).
+    float r; // Calculated SpO2 R value (1000x).
     uint8_t spo2Conf; // SpO2 confidence level in %, >40 is for consumer devices, >80,90 is for medical devices.
-    uint16_t spo2; // SpO2 value (10x).
+    float spo2; // SpO2 value (10x).
     uint8_t spo2PercentComplete; // SpO2 percent complete (0-100%). Bit[7]: SpO2 valid, Bit[6..0]: Percent complete.
     uint8_t spo2LowSignalQualityFlag; // SpO2 signal quality flag (0: Good quality, 1: Low quality).
     uint8_t spo2MotionFlag; // SpO2 motion flag (0: No motion, 1: Excessive motion).

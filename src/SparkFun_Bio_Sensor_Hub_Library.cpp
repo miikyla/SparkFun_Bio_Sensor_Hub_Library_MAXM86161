@@ -528,59 +528,61 @@ bioData SparkFun_Bio_Sensor_Hub::readSensorBpm(){
 // above into a single function call.
 sensorAlgoData SparkFun_Bio_Sensor_Hub::readSensorBpmMAXM86161(){
 
-  sensorAlgoData tempArr;
+  sensorAlgoData sensorAlgoStruct;
 
   if (_userSelectedMode == MODE_ONE){
 
     readFillArray(0x12, 0x01, 24 + 20, tempArr);
 
     // Green1 counts
-    tempArr.led1 = uint32_t(tempArr[0]) << 16;
-    tempArr.led1 |= uint32_t(tempArr[1]) << 8;
-    tempArr.led1 |= uint32_t(tempArr[2]);
+    sensorAlgoStruct.led1 = uint32_t(tempArr[0]) << 16;
+    sensorAlgoStruct.led1 |= uint32_t(tempArr[1]) << 8;
+    sensorAlgoStruct.led1 |= uint32_t(tempArr[2]);
 
     // IR LED counts
-    tempArr.led2 = uint32_t(tempArr[3]) << 16;
-    tempArr.led2 |= uint32_t(tempArr[4]) << 8;
-    tempArr.led2 |= uint32_t(tempArr[5]);
+    sensorAlgoStruct.led2 = uint32_t(tempArr[3]) << 16;
+    sensorAlgoStruct.led2 |= uint32_t(tempArr[4]) << 8;
+    sensorAlgoStruct.led2 |= uint32_t(tempArr[5]);
 
     // Red LED counts
-    tempArr.led3 = uint32_t(tempArr[6]) << 16;
-    tempArr.led3 |= uint32_t(tempArr[7]) << 8;
-    tempArr.led3 |= uint32_t(tempArr[8]);
+    sensorAlgoStruct.led3 = uint32_t(tempArr[6]) << 16;
+    sensorAlgoStruct.led3 |= uint32_t(tempArr[7]) << 8;
+    sensorAlgoStruct.led3 |= uint32_t(tempArr[8]);
 
     // Green2 counts
-    tempArr.led4 = uint32_t(tempArr[9]) << 16;
-    tempArr.led4 |= uint32_t(tempArr[10]) << 8;
-    tempArr.led4 |= uint32_t(tempArr[11]);
+    sensorAlgoStruct.led4 = uint32_t(tempArr[9]) << 16;
+    sensorAlgoStruct.led4 |= uint32_t(tempArr[10]) << 8;
+    sensorAlgoStruct.led4 |= uint32_t(tempArr[11]);
 
     // Accelerometer X-axis data
-    tempArr.x = int16_t(tempArr[18]) << 8;
-    tempArr.x |= int16_t(tempArr[19]);
+    sensorAlgoStruct.x = int16_t(tempArr[18]) << 8;
+    sensorAlgoStruct.x |= int16_t(tempArr[19]);
 
     // Accelerometer Y-axis data
-    tempArr.y = int16_t(tempArr[20]) << 8;
-    tempArr.y |= int16_t(tempArr[21]);
+    sensorAlgoStruct.y = int16_t(tempArr[20]) << 8;
+    sensorAlgoStruct.y |= int16_t(tempArr[21]);
 
     // Accelerometer Z-axis data
-    tempArr.z = int16_t(tempArr[22]) << 8;
-    tempArr.z |= int16_t(tempArr[23]);
+    sensorAlgoStruct.z = int16_t(tempArr[22]) << 8;
+    sensorAlgoStruct.z |= int16_t(tempArr[23]);
 
     // Current operating mode of the sensor
-    tempArr.current_operating_mode = tempArr[24];
+    sensorAlgoStruct.current_operating_mode = tempArr[24];
 
     // Calculated heart rate (10x)
-    tempArr.hr = uint16_t(tempArr[25]) << 8;
-    tempArr.hr |= uint16_t(tempArr[26]);
-    tempArr.hr /= 10;
+    uint16_t temp_hr = 0;
+    temp_hr = uint16_t(tempArr[25]) << 8;
+    temp_hr |= uint16_t(tempArr[26]);
+    tempArr.hr = (float)temp_hr/10;
 
     // Heart rate confidence level in % (>40 for consumer devices, >80,90 for medical devices)
     tempArr.hrConf = tempArr[27];
 
     // Inter-beat interval in ms (10x)
-    tempArr.rr = uint16_t(tempArr[28]) << 8;
-    tempArr.rr |= uint16_t(tempArr[29]);
-    tempArr.rr /= 10;
+    uint16_t temp_rr = 0;
+    temp_rr = uint16_t(tempArr[28]) << 8;
+    temp_rr |= uint16_t(tempArr[29]);
+    tempArr.rr = (float)temp_hr/10;
 
     // Confidence level of RtoR in % (nonzero when a new value is calculated)
     tempArr.rrConf = tempArr[30];
@@ -589,17 +591,19 @@ sensorAlgoData SparkFun_Bio_Sensor_Hub::readSensorBpmMAXM86161(){
     tempArr.activityClass = tempArr[31];
 
     // Calculated SpO2 R value (1000x)
-    tempArr.r = uint16_t(tempArr[32]) << 8;
-    tempArr.r |= uint16_t(tempArr[33]);
-    tempArr.r /= 1000;
+    uint16_t temp_r = 0;
+    temp_r = uint16_t(tempArr[32]) << 8;
+    temp_r |= uint16_t(tempArr[33]);
+    tempArr.r = (float)temp_r/1000;
 
     // SpO2 confidence level in %, >40 is for consumer devices, >80,90 is for medical devices
     tempArr.spo2Conf = tempArr[34];
 
     // SpO2 value (10x)
-    tempArr.spo2 = uint16_t(tempArr[35]) << 8;
-    tempArr.spo2 |= uint16_t(tempArr[36]);
-    tempArr.spo2 /= 10;
+    uint16_t temp_spo2 = 0;
+    temp_spo2 = uint16_t(tempArr[35]) << 8;
+    temp_spo2 |= uint16_t(tempArr[36]);
+    tempArr.spo2 = (float)temp_spo2/10;
 
     // SpO2 percent complete (0-100%). Bit[7]: SpO2 valid, Bit[6..0]: Percent complete
     tempArr.spo2PercentComplete = tempArr[37];
