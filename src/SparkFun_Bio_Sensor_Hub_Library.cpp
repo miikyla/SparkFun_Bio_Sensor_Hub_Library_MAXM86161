@@ -245,7 +245,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpm(uint8_t mode){
 // The biometric data includes data about heartrate, the confidence
 // level, SpO2 levels, and whether the sensor has detected a finger or not.
 // Of note, the number of samples is set to one.
-uint8_t configSensorBpmMAXM86161(uint8_t mode) 
+uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpmMAXM86161(uint8_t mode) 
 {
     uint8_t statusChauf; // Our status chauffeur
     if (mode == MODE_ONE || mode == MODE_TWO){}
@@ -532,101 +532,101 @@ sensorAlgoData SparkFun_Bio_Sensor_Hub::readSensorBpmMAXM86161(){
 
   if (_userSelectedMode == MODE_ONE){
 
-    readFillArray(0x12, 0x01, 24 + 20, tempArr);
+    readFillArray(0x12, 0x01, 24 + 20, bpmSenArrMAXM);
 
     // Green1 counts
-    sensorAlgoStruct.led1 = uint32_t(tempArr[0]) << 16;
-    sensorAlgoStruct.led1 |= uint32_t(tempArr[1]) << 8;
-    sensorAlgoStruct.led1 |= uint32_t(tempArr[2]);
+    sensorAlgoStruct.led1 = uint32_t(bpmSenArrMAXM[0]) << 16;
+    sensorAlgoStruct.led1 |= uint32_t(bpmSenArrMAXM[1]) << 8;
+    sensorAlgoStruct.led1 |= uint32_t(bpmSenArrMAXM[2]);
 
     // IR LED counts
-    sensorAlgoStruct.led2 = uint32_t(tempArr[3]) << 16;
-    sensorAlgoStruct.led2 |= uint32_t(tempArr[4]) << 8;
-    sensorAlgoStruct.led2 |= uint32_t(tempArr[5]);
+    sensorAlgoStruct.led2 = uint32_t(bpmSenArrMAXM[3]) << 16;
+    sensorAlgoStruct.led2 |= uint32_t(bpmSenArrMAXM[4]) << 8;
+    sensorAlgoStruct.led2 |= uint32_t(bpmSenArrMAXM[5]);
 
     // Red LED counts
-    sensorAlgoStruct.led3 = uint32_t(tempArr[6]) << 16;
-    sensorAlgoStruct.led3 |= uint32_t(tempArr[7]) << 8;
-    sensorAlgoStruct.led3 |= uint32_t(tempArr[8]);
+    sensorAlgoStruct.led3 = uint32_t(bpmSenArrMAXM[6]) << 16;
+    sensorAlgoStruct.led3 |= uint32_t(bpmSenArrMAXM[7]) << 8;
+    sensorAlgoStruct.led3 |= uint32_t(bpmSenArrMAXM[8]);
 
     // Green2 counts
-    sensorAlgoStruct.led4 = uint32_t(tempArr[9]) << 16;
-    sensorAlgoStruct.led4 |= uint32_t(tempArr[10]) << 8;
-    sensorAlgoStruct.led4 |= uint32_t(tempArr[11]);
+    sensorAlgoStruct.led4 = uint32_t(bpmSenArrMAXM[9]) << 16;
+    sensorAlgoStruct.led4 |= uint32_t(bpmSenArrMAXM[10]) << 8;
+    sensorAlgoStruct.led4 |= uint32_t(bpmSenArrMAXM[11]);
 
     // Accelerometer X-axis data
-    sensorAlgoStruct.x = int16_t(tempArr[18]) << 8;
-    sensorAlgoStruct.x |= int16_t(tempArr[19]);
+    sensorAlgoStruct.x = int16_t(bpmSenArrMAXM[18]) << 8;
+    sensorAlgoStruct.x |= int16_t(bpmSenArrMAXM[19]);
 
     // Accelerometer Y-axis data
-    sensorAlgoStruct.y = int16_t(tempArr[20]) << 8;
-    sensorAlgoStruct.y |= int16_t(tempArr[21]);
+    sensorAlgoStruct.y = int16_t(bpmSenArrMAXM[20]) << 8;
+    sensorAlgoStruct.y |= int16_t(bpmSenArrMAXM[21]);
 
     // Accelerometer Z-axis data
-    sensorAlgoStruct.z = int16_t(tempArr[22]) << 8;
-    sensorAlgoStruct.z |= int16_t(tempArr[23]);
+    sensorAlgoStruct.z = int16_t(bpmSenArrMAXM[22]) << 8;
+    sensorAlgoStruct.z |= int16_t(bpmSenArrMAXM[23]);
 
     // Current operating mode of the sensor
-    sensorAlgoStruct.current_operating_mode = tempArr[24];
+    sensorAlgoStruct.current_operating_mode = bpmSenArrMAXM[24];
 
     // Calculated heart rate (10x)
     uint16_t temp_hr = 0;
-    temp_hr = uint16_t(tempArr[25]) << 8;
-    temp_hr |= uint16_t(tempArr[26]);
-    tempArr.hr = (float)temp_hr/10;
+    temp_hr = uint16_t(bpmSenArrMAXM[25]) << 8;
+    temp_hr |= uint16_t(bpmSenArrMAXM[26]);
+    sensorAlgoStruct.hr = (float)temp_hr/10;
 
     // Heart rate confidence level in % (>40 for consumer devices, >80,90 for medical devices)
-    tempArr.hrConf = tempArr[27];
+    sensorAlgoStruct.hrConf = bpmSenArrMAXM[27];
 
     // Inter-beat interval in ms (10x)
     uint16_t temp_rr = 0;
-    temp_rr = uint16_t(tempArr[28]) << 8;
-    temp_rr |= uint16_t(tempArr[29]);
-    tempArr.rr = (float)temp_hr/10;
+    temp_rr = uint16_t(bpmSenArrMAXM[28]) << 8;
+    temp_rr |= uint16_t(bpmSenArrMAXM[29]);
+    sensorAlgoStruct.rr = (float)temp_hr/10;
 
     // Confidence level of RtoR in % (nonzero when a new value is calculated)
-    tempArr.rrConf = tempArr[30];
+    sensorAlgoStruct.rrConf = bpmSenArrMAXM[30];
 
     // Activity class (0: Rest, 1: Other, 2: Walk, 3: Run, 4: Bike)
-    tempArr.activityClass = tempArr[31];
+    sensorAlgoStruct.activityClass = bpmSenArrMAXM[31];
 
     // Calculated SpO2 R value (1000x)
     uint16_t temp_r = 0;
-    temp_r = uint16_t(tempArr[32]) << 8;
-    temp_r |= uint16_t(tempArr[33]);
-    tempArr.r = (float)temp_r/1000;
+    temp_r = uint16_t(bpmSenArrMAXM[32]) << 8;
+    temp_r |= uint16_t(bpmSenArrMAXM[33]);
+    sensorAlgoStruct.r = (float)temp_r/1000;
 
     // SpO2 confidence level in %, >40 is for consumer devices, >80,90 is for medical devices
-    tempArr.spo2Conf = tempArr[34];
+    sensorAlgoStruct.spo2Conf = bpmSenArrMAXM[34];
 
     // SpO2 value (10x)
     uint16_t temp_spo2 = 0;
-    temp_spo2 = uint16_t(tempArr[35]) << 8;
-    temp_spo2 |= uint16_t(tempArr[36]);
-    tempArr.spo2 = (float)temp_spo2/10;
+    temp_spo2 = uint16_t(bpmSenArrMAXM[35]) << 8;
+    temp_spo2 |= uint16_t(bpmSenArrMAXM[36]);
+    sensorAlgoStruct.spo2 = (float)temp_spo2/10;
 
     // SpO2 percent complete (0-100%). Bit[7]: SpO2 valid, Bit[6..0]: Percent complete
-    tempArr.spo2PercentComplete = tempArr[37];
+    sensorAlgoStruct.spo2PercentComplete = bpmSenArrMAXM[37];
 
     // SpO2 signal quality flag (0: Good quality, 1: Low quality)
-    tempArr.spo2LowSignalQualityFlag = tempArr[38];
+    sensorAlgoStruct.spo2LowSignalQualityFlag = bpmSenArrMAXM[38];
 
     // SpO2 motion flag (0: No motion, 1: Excessive motion)
-    tempArr.spo2MotionFlag = tempArr[39];
+    sensorAlgoStruct.spo2MotionFlag = bpmSenArrMAXM[39];
 
     // SpO2 low PI flag (0: Normal PI, 1: Low PI)
-    tempArr.spo2LowPIFlag = tempArr[40];
+    sensorAlgoStruct.spo2LowPIFlag = bpmSenArrMAXM[40];
 
     // SpO2 reliability flag for R (0: Reliable, 1: Unreliable)
-    tempArr.spo2ReliabilityFlag = tempArr[41];
+    sensorAlgoStruct.spo2ReliabilityFlag = bpmSenArrMAXM[41];
 
     // SpO2 state (0: LED adjustment, 1: Computation, 2: Success, 3: Timeout)
-    tempArr.spo2State = tempArr[42];
+    sensorAlgoStruct.spo2State = bpmSenArrMAXM[42];
 
     // Skin contact state (0: Undetected, 1: Off skin, 2: On some subject, 3: On skin)
-    tempArr.skinContactState = tempArr[43];
+    sensorAlgoStruct.skinContactState = bpmSenArrMAXM[43];
 
-    return tempArr;
+    return sensorAlgoStruct;
   }
 
   else if (_userSelectedMode == MODE_TWO){

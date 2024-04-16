@@ -356,6 +356,7 @@ class SparkFun_Bio_Sensor_Hub
     uint8_t bpmArrTwo[MAXFAST_ARRAY_SIZE + MAXFAST_EXTENDED_DATA] {};
     uint8_t senArr[MAX30101_LED_ARRAY] {};
     uint8_t bpmSenArr[MAXFAST_ARRAY_SIZE + MAX30101_LED_ARRAY] {};
+    uint8_t bpmSenArrMAXM[24 + 20] {};
     uint8_t bpmSenArrTwo[MAXFAST_ARRAY_SIZE + MAXFAST_EXTENDED_DATA + MAX30101_LED_ARRAY] {};
 
     // Constructor ----------
