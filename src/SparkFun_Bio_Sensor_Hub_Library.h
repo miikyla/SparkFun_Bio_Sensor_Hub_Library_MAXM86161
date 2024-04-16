@@ -799,6 +799,11 @@ class SparkFun_Bio_Sensor_Hub
     // of the specific bytes followed by a read to confirm positive transmission.
     uint8_t writeByte(uint8_t, uint8_t, uint8_t, uint8_t);
 
+    // This function sends is simliar to the one above and sends info to the MAX32664
+    // but takes an additional uint8_t as a paramter. Again there is the write
+    // of the specific bytes followed by a read to confirm positive transmission.
+    uint8_t writeByte(int, int, int, int);
+
     // This function is the same as the function above and uses the given family,
     // index, and write byte, but also takes a 16 bit integer as a paramter to communicate
     // with the MAX32664 which in turn communicates with downward sensors. There

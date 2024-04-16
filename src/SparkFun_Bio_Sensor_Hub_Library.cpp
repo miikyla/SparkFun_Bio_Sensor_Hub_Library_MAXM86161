@@ -1739,6 +1739,34 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
 // to the registers of downward sensors and so also requires a
 // register address and register value as parameters. Again there is the write
 // of the specific bytes followed by a read to confirm positive transmission.
+uint8_t SparkFun_Bio_Sensor_Hub::writeByte(int _familyByte, int _indexByte,\
+                                           int _writeByte, int _writeVal)
+{
+
+  digitalWrite(_mfioPin, LOW);
+
+  _i2cPort->beginTransmission(_address);
+  _i2cPort->write(_familyByte);
+  _i2cPort->write(_indexByte);
+  _i2cPort->write(_writeByte);
+  _i2cPort->write(_writeVal);
+  _i2cPort->endTransmission();
+  delay(CMD_DELAY);
+
+  // Status Byte, 0x00 is a successful transmit.
+  _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
+  uint8_t statusByte = _i2cPort->read();
+
+  digitalWrite(_mfioPin, HIGH);
+
+  return statusByte;
+
+}
+
+// This function sends information to the MAX32664 to specifically write values
+// to the registers of downward sensors and so also requires a
+// register address and register value as parameters. Again there is the write
+// of the specific bytes followed by a read to confirm positive transmission.
 uint8_t SparkFun_Bio_Sensor_Hub::writeLongBytes(uint8_t _familyByte, uint8_t _indexByte,\
                                                 uint8_t _writeByte, int32_t _writeVal[], const size_t _size)
 {
