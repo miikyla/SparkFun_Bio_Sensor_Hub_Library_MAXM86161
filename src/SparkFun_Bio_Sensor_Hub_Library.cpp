@@ -633,36 +633,36 @@ sensorAlgoData SparkFun_Bio_Sensor_Hub::readSensorBpmMAXM86161(){
 
     // TODO
     
-    return tempArr;
+    return sensorAlgoStruct;
 
   }
 
   else {
-    tempArr.led1 = 0;
-    tempArr.led2 = 0;
-    tempArr.led3 = 0;
-    tempArr.led4 = 0;
-    tempArr.x = 0;
-    tempArr.y = 0;
-    tempArr.z = 0;
-    tempArr.current_operating_mode = 0;
-    tempArr.hr = 0;
-    tempArr.hrConf = 0;
-    tempArr.rr = 0;
-    tempArr.rrConf = 0;
-    tempArr.activityClass = 0;
-    tempArr.r = 0;
-    tempArr.spo2Conf = 0;
-    tempArr.spo2 = 0;
-    tempArr.spo2PercentComplete = 0;
-    tempArr.spo2LowSignalQualityFlag = 0;
-    tempArr.spo2MotionFlag = 0;
-    tempArr.spo2LowPIFlag = 0;
-    tempArr.spo2ReliabilityFlag = 0;
-    tempArr.spo2State = 0;
-    tempArr.skinContactState = 0;
+    sensorAlgoStruct.led1 = 0;
+    sensorAlgoStruct.led2 = 0;
+    sensorAlgoStruct.led3 = 0;
+    sensorAlgoStruct.led4 = 0;
+    sensorAlgoStruct.x = 0;
+    sensorAlgoStruct.y = 0;
+    sensorAlgoStruct.z = 0;
+    sensorAlgoStruct.current_operating_mode = 0;
+    sensorAlgoStruct.hr = 0;
+    sensorAlgoStruct.hrConf = 0;
+    sensorAlgoStruct.rr = 0;
+    sensorAlgoStruct.rrConf = 0;
+    sensorAlgoStruct.activityClass = 0;
+    sensorAlgoStruct.r = 0;
+    sensorAlgoStruct.spo2Conf = 0;
+    sensorAlgoStruct.spo2 = 0;
+    sensorAlgoStruct.spo2PercentComplete = 0;
+    sensorAlgoStruct.spo2LowSignalQualityFlag = 0;
+    sensorAlgoStruct.spo2MotionFlag = 0;
+    sensorAlgoStruct.spo2LowPIFlag = 0;
+    sensorAlgoStruct.spo2ReliabilityFlag = 0;
+    sensorAlgoStruct.spo2State = 0;
+    sensorAlgoStruct.skinContactState = 0;
 
-    return tempArr;
+    return sensorAlgoStruct;
   }
 }
 
