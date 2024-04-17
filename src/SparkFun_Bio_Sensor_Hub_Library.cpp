@@ -1827,6 +1827,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::enableWrite(uint8_t _familyByte, uint8_t _index
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1867,6 +1868,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1896,6 +1898,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1925,6 +1928,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(uint8_t _familyByte, uint8_t _indexBy
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1953,6 +1957,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeByte(int _familyByte, int _indexByte,\
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -1981,6 +1986,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeLongBytes(uint8_t _familyByte, uint8_t _in
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2016,6 +2022,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::writeBytes(uint8_t _familyByte, uint8_t _indexB
 {
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2049,6 +2056,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexByt
   uint8_t statusByte;
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2087,6 +2095,7 @@ uint8_t  SparkFun_Bio_Sensor_Hub::readByte(uint8_t _familyByte, uint8_t _indexBy
   uint8_t statusByte;
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2118,6 +2127,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::readFillArray(uint8_t _familyByte, uint8_t _ind
   uint8_t statusByte;
 
   digitalWrite(_mfioPin, LOW);
+  delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2158,6 +2168,7 @@ uint16_t SparkFun_Bio_Sensor_Hub::readIntByte(uint8_t _familyByte, uint8_t _inde
    uint8_t statusByte;
 
    digitalWrite(_mfioPin, LOW);
+   delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2197,6 +2208,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
    uint8_t statusByte;
 
    digitalWrite(_mfioPin, LOW);
+   delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
@@ -2238,7 +2250,8 @@ uint8_t SparkFun_Bio_Sensor_Hub::readMultipleBytes(uint8_t _familyByte, uint8_t 
 
    uint8_t statusByte;
 
-   digitalWrite(_mfioPin, HIGH);
+   digitalWrite(_mfioPin, LOW);
+   delay(1);
 
   _i2cPort->beginTransmission(_address);
   _i2cPort->write(_familyByte);
