@@ -466,8 +466,13 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpmMAXM86161(uint8_t mode)
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    // 40. data ready threshold
+    // 40.1 data ready threshold
     statusChauf = writeByte((uint8_t)0x10, (uint8_t)0x01, (uint8_t)0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    // 40.2 Sample report period
+    statusChauf = writeByte((uint8_t)0x10, (uint8_t)0x02, (uint8_t)0x19);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
