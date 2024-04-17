@@ -279,13 +279,22 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpmMAXM86161(uint8_t mode)
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.7");
-    statusChauf = writeByte(0x50, 0x07, 0x12, 0x01);
+    Serial.println("1.7/AGC");
+    statusChauf = writeByte(0x50, 0x07, 0x12, 0x00);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
     Serial.println("1.8");
     statusChauf = writeByte(0x50, 0x07, 0x0C, 0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("1.9/AGC");
+    uint8_t f = 0x50;
+    uint8_t i = 0x07;
+    uint8_t w = 0x11;
+    uint8_t vals[2] = {0x00, 0x64};
+    statusChauf = writeBytes(f, i, w, vals, 2);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
