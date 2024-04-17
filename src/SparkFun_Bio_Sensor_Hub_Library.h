@@ -26,6 +26,8 @@
 #define ALGO_CMD_DELAY_SHORT      45 // Milliseconds
 #define ALGO_CMD_DELAY_LONG       45 // Milliseconds
 #define CMD_DELAY                 2 // Milliseconds
+#define WAS_ALGO_DELAY_SHORT      120 // Milliseconds
+#define WAS_ALGO_DELAY_LONG       320 // Milliseconds
 #define MAXFAST_ARRAY_SIZE        6  // Number of bytes....
 #define MAXFAST_EXTENDED_DATA     5
 #define MAX30101_LED_ARRAY        12 // 4 values of 24 bit (3 byte) LED values

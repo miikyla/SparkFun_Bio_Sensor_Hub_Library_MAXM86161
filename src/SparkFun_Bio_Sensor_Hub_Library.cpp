@@ -477,7 +477,7 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpmMAXM86161(uint8_t mode)
     return statusChauf;
 
     Serial.println("42. Enable mode 1");    
-    statusChauf = writeByte((uint8_t)0x52, (uint8_t)0x07, (uint8_t)0x01);
+    statusChauf = enableWrite((uint8_t)0x52, (uint8_t)0x07, (uint8_t)0x01);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
@@ -1836,12 +1836,16 @@ uint8_t SparkFun_Bio_Sensor_Hub::enableWrite(uint8_t _familyByte, uint8_t _index
 
   if( _familyByte == ENABLE_SENSOR && _indexByte == ENABLE_MAX30101)
     delay(ENABLE_CMD_DELAY);
-  if( _familyByte == ENABLE_SENSOR && _indexByte == ENABLE_MAXM86161)
+  else if( _familyByte == ENABLE_SENSOR && _indexByte == ENABLE_MAXM86161)
     delay(ENABLE_CMD_MAXM86161_DELAY);
-  if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_AGC_ALGO)
+  else if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_AGC_ALGO)
     delay(ALGO_CMD_DELAY_SHORT);
-  if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_WHRM_ALGO)
+  else if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_WHRM_ALGO)
     delay(ALGO_CMD_DELAY_LONG);
+  else if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_WAS_ALGO && _enableByte == 0x00)
+    delay(WAS_ALGO_DELAY_SHORT);
+  else if( _familyByte == ENABLE_ALGORITHM && _indexByte == ENABLE_WAS_ALGO)
+    delay(WAS_ALGO_DELAY_LONG);
 
   // Status Byte, success or no? 0x00 is a successful transmit
   _i2cPort->requestFrom(_address, static_cast<uint8_t>(1));
