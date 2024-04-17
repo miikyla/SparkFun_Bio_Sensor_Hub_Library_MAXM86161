@@ -247,60 +247,256 @@ uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpm(uint8_t mode){
 // Of note, the number of samples is set to one.
 uint8_t SparkFun_Bio_Sensor_Hub::configSensorBpmMAXM86161(uint8_t mode) 
 {
+    uint8_t vals[8] = {0};
+
     uint8_t statusChauf; // Our status chauffeur
     if (mode == MODE_ONE || mode == MODE_TWO){}
     else return INCORR_PARAM;
 
-    Serial.println("1.0");
-    Serial.println("1.1");
-
-    Serial.println("1.2");
-    statusChauf = setOutputMode(SENSOR_AND_ALGORITHM); // Data and sensor data
+    Serial.println("1. Write sensor config");
+    vals[0] = 0x02;
+    vals[1] = 0x3F;
+    statusChauf = writeBytes((uint8_t)0x46, (uint8_t)0x00, (uint8_t)0x00, vals, 2);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.3");
-    statusChauf = setFifoThreshold(0x01); // One sample before interrupt is fired to the MAX32664
+    Serial.println("2. Set algo run mode");
+    statusChauf = writeByte((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x0A, (uint8_t)0x02);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.4");
-    statusChauf = writeByte(0x10, 0x02, 0x01);
+    Serial.println("3. Disable AEC");
+    statusChauf = writeByte((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x0B, (uint8_t)0x00);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.5");
-    statusChauf = writeByte(0x50, 0x07, 0x0A, 0x00);
+    Serial.println("4. Set Motion Mag threshold");
+    vals[0] = 0x01;
+    vals[1] = 0x2C;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x0E, vals, 2);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.6");
-    statusChauf = writeByte(0x50, 0x07, 0x0B, 0x01);
+    Serial.println("5. Set slot firings");
+    vals[0] = 0x12;
+    vals[1] = 0x30;
+    vals[2] = 0x00;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x19, vals, 3);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.7/AGC");
-    statusChauf = writeByte(0x50, 0x07, 0x12, 0x00);
+    Serial.println("6. Set PPG1 control");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x11, (uint8_t)0x3F);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.8");
-    statusChauf = writeByte(0x50, 0x07, 0x0C, 0x01);
+    Serial.println("7. Set PPG2 control");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x12, (uint8_t)0x00);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.9/AGC");
-    uint8_t f = 0x50;
-    uint8_t i = 0x07;
-    uint8_t w = 0x11;
-    uint8_t vals[2] = {0x00, 0x64};
-    statusChauf = writeBytes(f, i, w, vals, 2);
+    Serial.println("8. Set LED1 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x23, (uint8_t)0x05);
     if( statusChauf != SFE_BIO_SUCCESS )
     return statusChauf;
 
-    Serial.println("1.30");
-    statusChauf = wearableAlgoSuiteControl(SH_ENABLE); //Enable algorithm.
+    Serial.println("9. Set LED2 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x24, (uint8_t)0x05);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
 
+    Serial.println("10. Set LED1 Range");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x2A, (uint8_t)0x3F);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("11. Set Continuous HRM SP02");
+    statusChauf = writeByte((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x0A, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("12. Enable AEC");
+    statusChauf = writeByte((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x0B, (uint8_t)0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("13. Enable auto calc of target PD");
+    statusChauf = writeByte((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x12, (uint8_t)0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("14. Write target PD current");
+    vals[0] = 0x00;
+    vals[1] = 0x32;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x11, vals, 2);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("15. Slot firing sequence");
+    vals[0] = 0x12;
+    vals[1] = 0x30;
+    vals[2] = 0x00;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x19, vals, 3);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("16. Slot order");
+    vals[0] = 0x00;
+    vals[1] = 0x71;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x17, vals, 2);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("17. Write slot and PD config");
+    vals[0] = 0x10;
+    vals[1] = 0x20;
+    statusChauf = writeBytes((uint8_t)0x50, (uint8_t)0x07, (uint8_t)0x18, vals, 2);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("18. LED1 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x23, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("19. LED2 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x24, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("20. LED3 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x25, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("21. Write sensor config");
+    vals[0] = 0x02;
+    vals[1] = 0x3F;
+    statusChauf = writeBytes((uint8_t)0x46, (uint8_t)0x00, (uint8_t)0x00, vals, 2);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("22. AFE system control");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x0D, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("23. FIFO config - 125");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x09, (uint8_t)0x7D);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("24. PPG1 config");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x11, (uint8_t)0x3F);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+    
+    Serial.println("25. LED1 sequence");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x20, (uint8_t)0x21);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("26. LED2 sequence");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x21, (uint8_t)0x03);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("27. LED3 sequence");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x22, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("28. LED1 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x23, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("29. LED2 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x24, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("30. LED3 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x25, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("31. PPG Sync Control");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x10, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("32. PPG2 config");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x12, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("33. PPG3 config");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x13, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("34. Prox interrupt threshold");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x14, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("35. photo diode bias");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x15, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+    
+    Serial.println("36. Picket fence");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x16, (uint8_t)0x40);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("37. LED pilot PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x29, (uint8_t)0x00);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("38. LED range 1");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x2A, (uint8_t)0x3F);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("39. Interrupt enable");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x02, (uint8_t)0x80);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("40. data ready threshold");
+    statusChauf = writeByte((uint8_t)0x10, (uint8_t)0x01, (uint8_t)0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("41. sample counte byte, sensor data");
+    statusChauf = writeByte((uint8_t)0x10, (uint8_t)0x00, (uint8_t)0x03);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("42. Enable mode 1");    
+    statusChauf = writeByte((uint8_t)0x52, (uint8_t)0x07, (uint8_t)0x01);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("43. LED1 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x23, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("44. LED2 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x24, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    Serial.println("45. LED3 PA");
+    statusChauf = writeByte((uint8_t)0x40, (uint8_t)0x00, (uint8_t)0x25, (uint8_t)0x0A);
+    if( statusChauf != SFE_BIO_SUCCESS )
+    return statusChauf;
+
+    // Cleaning up
     _userSelectedMode = mode;
     _sampleRate = readAlgoSamples();
 
